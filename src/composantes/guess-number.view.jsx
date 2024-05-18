@@ -3,7 +3,7 @@ import GuessNumberInput from "./champ";
 import { ProgressBar } from "./progress-bar";
 import { useTentative } from "./hook/useCount";
 import clsx from "clsx";
-
+import logo from "../images/logo.png"
 export const GuessNumberView = () => {
   const {
     tentative,
@@ -17,8 +17,8 @@ export const GuessNumberView = () => {
   const [resultat, setResultat] = useState(
     "Le nombre mystère est entre 0 et 100"
   );
-
-
+  const [max,setMax] = useState(100)
+  const [min,setMin] = useState(0)
   const verifResult = (e) => {
     e.preventDefault();
     countTentative();
@@ -26,36 +26,42 @@ export const GuessNumberView = () => {
       setResultat("bravooooo");
       push();
       funcIsGood();
+      setMax(100)
+      setMin(0)
     }
     if (guessNumber > numberValue) {
       setResultat("Le nombre mystère est plus grand");
+      setMin(numberValue)
     }
     if (guessNumber < numberValue) {
-     setResultat('Le nombre mystère est plus petit')
+      setResultat("Le nombre mystère est plus petit");
+      setMax(numberValue)
     }
-    setNumberValue(' ')
-   
+    setNumberValue(" ");
   };
 
   return (
     <>
-      {numberValue} <br />
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
-            className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt="Your Company"
+            className="mx-auto h-20 w-auto"
+            src={logo}
+            alt="Guess Number by Huro "
           />
+          
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            
             <div
               className={clsx(
                 countdown < 5 && "bg-red-600 border-red-600",
-                "border-2 inline-block py-3 px-5 rounded-full"
+                "border-2 inline-block py-3 px-5 rounded-full cursor-not-allowed"
               )}
             >
-              {countdown}
+              {countdown ==0 ? guessNumber : countdown}
+
             </div>
+
           </h2>
         </div>
 
@@ -81,6 +87,15 @@ export const GuessNumberView = () => {
                     numberValue={numberValue}
                     setNumberValue={setNumberValue}
                   />
+                  <div className="flex justify-between mt-5">
+                    <span className="inline-flex items-center rounded-md bg-blue-300 px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-500/10">
+                      {min}
+                    </span>
+                    ------------------------
+                    <span className="inline-flex items-center rounded-md bg-blue-600 px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-500/10">
+                      {max}
+                    </span>
+                  </div>
                 </>
               )}
             </div>
@@ -91,7 +106,7 @@ export const GuessNumberView = () => {
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  Valider 
+                  Valider {guessNumber}
                 </button>
               ) : (
                 <a
@@ -105,7 +120,6 @@ export const GuessNumberView = () => {
           </form>
         </div>
       </div>
-      dd
     </>
   );
 };
